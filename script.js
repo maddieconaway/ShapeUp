@@ -2,16 +2,10 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    let arrShapes = [];
-
     class Shape {
         constructor() {
             this.x = Math.floor(Math.random() * 600);
             this.y = Math.floor(Math.random() * 600);
-            this.startx = 0;
-            this.starty = 0;
-            this.endx = 0;
-            this.endy = 0;
         }
     }
 
@@ -22,22 +16,39 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         render() {
-            let ctx = document.getElementById('canvasDraw').getContext("2d");
-            let xh = parseInt(this.x) - parseInt(this.height);
-            let yh = parseInt(this.y) + parseInt(this.height);
-            ctx.fillStyle = 'yellow';
-            ctx.beginPath();
-            ctx.moveTo(this.y, this.x);
-            ctx.lineTo(this.y, xh);
-            ctx.lineTo(yh, this.x);
-            ctx.lineTo(this.y, this.x);
-            ctx.closePath();
-            ctx.fill();
-            //parent class properties
-            this.startx = this.x;
-            this.starty = this.y - this.height;
-            this.endx = this.x + this.height;
-            this.endy = this.y;
+            let $divDraw = $('#divDraw');
+            let $triangle = $(`<span class="Triangle" data-value1=${this.height}></span>`);
+
+            $triangle.css({
+                width: 0,
+                height: 0,
+                left: this.x + 200,
+                top: this.y + 250,
+                //this is so sneeky
+                borderTop: this.height + 'px solid transparent',
+                borderLeft: this.height + 'px solid transparent',
+                borderRight: this.height + 'px solid transparent',
+                borderBottom: this.height + 'px solid yellow',
+                position: 'absolute'
+            });
+
+            $triangle.dblclick(function () {
+                this.remove();
+            });
+
+            $triangle.click(function () {
+                $('#divSidebar ul').remove();
+                let v=this.getAttribute("data-value1");
+                let c = this.getAttribute("class");
+                let $divSidebar = $('#divSidebar');
+                let position = $(this).position();
+                let $ul = $(`<ul>${c}</ul>`);
+                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
+                $ul.append($(`<li>side length: ${v}</li>`));
+                $divSidebar.append($ul);
+            });
+
+            $divDraw.append($triangle);
         }
     }
 
@@ -49,16 +60,38 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         render() {
-            let ctx = document.getElementById('canvasDraw').getContext("2d");
-            ctx.fillStyle = 'green';
-            ctx.beginPath();
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.fill();
-            //parent class properties
-            this.startx = parseInt(this.x);
-            this.starty = parseInt(this.y) - parseInt(this.height);
-            this.endx = parseInt(this.x) + parseInt(this.width);
-            this.endy = parseInt(this.y);
+            let $divDraw = $('#divDraw');
+            let $rect = $(`<span class="Rectangle" data-value1=${this.width} data-value2=${this.height}></span>`);
+            
+            $rect.css({
+                width: this.width,
+                height: this.height,
+                left: this.x + 200,
+                top: this.y + 250,
+                border: '2px solid green',
+                backgroundColor: 'green',
+                position: 'absolute'
+            });
+
+            $rect.dblclick(function () {
+                this.remove();
+            });
+
+            $rect.click(function () {
+                $('#divSidebar ul').remove();
+                let $divSidebar = $('#divSidebar');
+                let position = $(this).position();
+                let c = this.getAttribute("class");
+                let w = this.getAttribute("data-value1");
+                let h = this.getAttribute("data-value2");
+                let $ul = $(`<ul>${c}</ul>`);
+                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
+                $ul.append($(`<li>width: ${w}</li>`));
+                $ul.append($(`<li>height: ${h}</li>`));
+                $divSidebar.append($ul);
+            });
+
+            $divDraw.append($rect);
         }
     }
 
@@ -69,16 +102,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         render() {
-            let ctx = document.getElementById('canvasDraw').getContext("2d");
-            ctx.fillStyle = 'red';
-            ctx.beginPath();
-            ctx.rect(this.x, this.y, this.leg, this.leg);
-            ctx.fill();
-            //parent class properties
-            this.startx = parseInt(this.x);
-            this.starty = parseInt(this.y) - parseInt(this.leg);
-            this.endx = parseInt(this.x) + parseInt(this.leg);
-            this.endy = parseInt(this.y);
+            let $divDraw = $('#divDraw');
+            let $square = $(`<span class="Square" data-value1=${this.leg}></span>`);
+            
+            $square.css({
+                width: this.leg,
+                height: this.leg,
+                left: this.x + 200,
+                top: this.y + 250,
+                border: '2px solid red',
+                backgroundColor: 'red',
+                position: 'absolute'
+            });
+
+            $square.dblclick(function () {
+                this.remove();
+            });
+
+            $square.click(function () {
+                $('#divSidebar ul').remove();
+                let v=this.getAttribute("data-value1");
+                let c = this.getAttribute("class");
+                let $divSidebar = $('#divSidebar');
+                let position = $(this).position();
+                let $ul = $(`<ul>${c}</ul>`);
+                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
+                $ul.append($(`<li>side length: ${v}</li>`));
+                $divSidebar.append($ul);
+            });
+
+            $divDraw.append($square);
         }
     }
 
@@ -89,56 +142,58 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         render() {
-            let ctx = document.getElementById('canvasDraw').getContext("2d");
-            //ctx.strokeStyle= 'purple';
-            ctx.fillStyle = 'purple';
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-            ctx.fill();
+            let $divDraw = $('#divDraw');
+            let $circle = $(`<span class="Circle" data-value1=${this.radius}></span>`);
+
+            $circle.css({
+                borderRadius: '50%',
+                left: this.x + 200,
+                top: this.y + 250,
+                width: this.radius*2,
+                height: this.radius*2,
+                border: '2px solid purple',
+                backgroundColor: 'purple',
+                position: 'absolute'
+            });
+
+            $circle.dblclick(function () {
+                this.remove();
+            });
+
+            $circle.click(function () {
+                $('#divSidebar ul').remove();
+                let v=this.getAttribute("data-value1");
+                let c = this.getAttribute("class");
+                let $divSidebar = $('#divSidebar');
+                let position = $(this).position();
+                let $ul = $(`<ul>${c}</ul>`);
+                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
+                $ul.append($(`<li>side length: ${v}</li>`));
+                $divSidebar.append($ul);
+            });
+
+            $divDraw.append($circle);
         }
     }
 
     $('#btnRectangle').on('click', function () {
         let rectangle = new Rectangle($('#txtRectangleHeight').val(), $('#txtRectangleWidth').val());
         rectangle.render();
-        arrShapes.push(rectangle);
     });
 
     $('#btnCircle').on('click', function () {
         let circle = new Circle($('#txtRadius').val());
         circle.render();
-        arrShapes.push(circle);
     });
 
     $('#btnSquare').on('click', function () {
         let square = new Square($('#txtSquare').val());
         square.render();
-        arrShapes.push(square);
     });
 
     $('#btnTriangle').on('click', function () {
         let triangle = new Triangle($('#txtTriangle').val());
         triangle.render();
-        arrShapes.push(triangle);
-    });
-
-    $('#canvasDraw').on('click', function (e) {
-        let c = document.getElementById('canvasDraw')
-        var rect = c.getBoundingClientRect();
-        let  x =  e.clientX - rect.left;
-        let  y = e.clientY - rect.top;
-        for (i = 0; i < arrShapes.length; i++) {
-            let a = arrShapes[i];
-            console.log('x:' + x + 'y:' + y);
-            console.log(x >= a.startx && x <= a.endx);
-            console.log('a.starty:' + a.starty);
-            console.log('a.endy:' + a.endy);
-            console.log(y >= a.starty && y <= a.endy);
-            if ((x >= a.startx && x <= a.endx) && (y >= a.starty && y <= a.endy)) {
-                console.log('found a shape');
-                break;
-            }
-        }
     });
 });
 
