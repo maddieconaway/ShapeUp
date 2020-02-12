@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         render() {
             let $divDraw = $('#divDraw');
-            let $triangle = $(`<span class="Triangle" data-value1=${this.height}></span>`);
+            let $triangle = $(`<span class="Triangle" data-value1=${this.height} data-value1-desc='height'></span>`);
 
             $triangle.css({
                 width: 0,
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 top: this.y + 250,
                 //this is so sneeky
                 borderTop: this.height + 'px solid transparent',
-                borderLeft: this.height + 'px solid transparent',
+                borderLeft: this.height + 'px solid yellow',
                 borderRight: this.height + 'px solid transparent',
                 borderBottom: this.height + 'px solid yellow',
                 position: 'absolute'
@@ -37,15 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             $triangle.click(function () {
-                $('#divSidebar ul').remove();
-                let v=this.getAttribute("data-value1");
-                let c = this.getAttribute("class");
-                let $divSidebar = $('#divSidebar');
-                let position = $(this).position();
-                let $ul = $(`<ul>${c}</ul>`);
-                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
-                $ul.append($(`<li>side length: ${v}</li>`));
-                $divSidebar.append($ul);
+                describe(this);
             });
 
             $divDraw.append($triangle);
@@ -61,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         render() {
             let $divDraw = $('#divDraw');
-            let $rect = $(`<span class="Rectangle" data-value1=${this.width} data-value2=${this.height}></span>`);
-            
+            let $rect = $(`<span class="Rectangle" data-value1=${this.width} data-value2=${this.height} data-value1-desc='width' data-value2-desc='height'></span>`);
+
             $rect.css({
                 width: this.width,
                 height: this.height,
@@ -78,17 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             $rect.click(function () {
-                $('#divSidebar ul').remove();
-                let $divSidebar = $('#divSidebar');
-                let position = $(this).position();
-                let c = this.getAttribute("class");
-                let w = this.getAttribute("data-value1");
-                let h = this.getAttribute("data-value2");
-                let $ul = $(`<ul>${c}</ul>`);
-                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
-                $ul.append($(`<li>width: ${w}</li>`));
-                $ul.append($(`<li>height: ${h}</li>`));
-                $divSidebar.append($ul);
+                describe(this);
             });
 
             $divDraw.append($rect);
@@ -103,8 +85,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         render() {
             let $divDraw = $('#divDraw');
-            let $square = $(`<span class="Square" data-value1=${this.leg}></span>`);
-            
+            let $square = $(`<span class="Square" data-value1=${this.leg} data-value1-desc='side length'></span>`);
+
             $square.css({
                 width: this.leg,
                 height: this.leg,
@@ -120,15 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             $square.click(function () {
-                $('#divSidebar ul').remove();
-                let v=this.getAttribute("data-value1");
-                let c = this.getAttribute("class");
-                let $divSidebar = $('#divSidebar');
-                let position = $(this).position();
-                let $ul = $(`<ul>${c}</ul>`);
-                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
-                $ul.append($(`<li>side length: ${v}</li>`));
-                $divSidebar.append($ul);
+                describe(this);
             });
 
             $divDraw.append($square);
@@ -143,14 +117,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         render() {
             let $divDraw = $('#divDraw');
-            let $circle = $(`<span class="Circle" data-value1=${this.radius}></span>`);
+            let $circle = $(`<span class="Circle" data-value1=${this.radius} data-value1-desc='radius'></span>`);
 
             $circle.css({
                 borderRadius: '50%',
                 left: this.x + 200,
                 top: this.y + 250,
-                width: this.radius*2,
-                height: this.radius*2,
+                width: this.radius * 2,
+                height: this.radius * 2,
                 border: '2px solid purple',
                 backgroundColor: 'purple',
                 position: 'absolute'
@@ -161,19 +135,31 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             $circle.click(function () {
-                $('#divSidebar ul').remove();
-                let v=this.getAttribute("data-value1");
-                let c = this.getAttribute("class");
-                let $divSidebar = $('#divSidebar');
-                let position = $(this).position();
-                let $ul = $(`<ul>${c}</ul>`);
-                $ul.append($(`<li>x: ${position.left}   y: ${position.top}</li>`));
-                $ul.append($(`<li>side length: ${v}</li>`));
-                $divSidebar.append($ul);
+                describe(this);
             });
 
             $divDraw.append($circle);
         }
+    }
+
+    function describe(e) {
+        $('#divSidebar ul').remove();
+        let c = e.getAttribute("class");
+        let v = e.getAttribute("data-value1");
+        let d = e.getAttribute("data-value1-desc");
+
+        let v2 = e.getAttribute("data-value2");
+        let d2 = e.getAttribute("data-value2-desc");
+
+        let $div = $('#divSidebar');
+        let p = $(e).position();
+        let $ul = $(`<ul>${c}</ul>`);
+        $ul.append($(`<li>x: ${p.left}   y: ${p.top}</li>`));
+        $ul.append($(`<li>${d}: ${v}</li>`));
+        if (c == 'Rectangle') {
+            $ul.append($(`<li>${d2}: ${v2}</li>`));
+        }
+        $div.append($ul);
     }
 
     $('#btnRectangle').on('click', function () {
